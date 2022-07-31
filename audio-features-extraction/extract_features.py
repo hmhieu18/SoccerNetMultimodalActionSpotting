@@ -228,7 +228,7 @@ for file_path in list_of_files:
             
             print("GAME NAME", gameName)
             visualFilepath = os.path.join(
-                dir_name, gameName, basename[0]+"_ResNET_TF2.npy")
+                video_path, gameName, basename[0]+"_ResNET_TF2.npy")
 
             featuresFilePath = generate_newname(file_path, '_VGGish', 'npy')
             # if not containsFile(gameDir, featuresFilePath):
