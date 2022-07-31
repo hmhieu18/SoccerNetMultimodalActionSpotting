@@ -225,7 +225,8 @@ for file_path in list_of_files:
 
             gameName = file_path.split(basename)[0]
             gameName = gameName.split(dir_name)[-1]
-
+            
+            print("GAME NAME", gameName)
             visualFilepath = os.path.join(
                 dir_name, gameName, basename[0]+"_ResNET_TF2.npy")
 
