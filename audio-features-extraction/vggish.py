@@ -23,7 +23,7 @@ import vggish_params as params
 
 
 # weight path
-WEIGHTS_PATH = './vggish_audioset_weights_without_fc2.h5'
+WEIGHTS_PATH = '/content/SoccerNetMultimodalActionSpotting/vggish_audioset_weights_without_fc2.h5'
 WEIGHTS_PATH_TOP = './vggish_audioset_weights.h5'
 
 def VGGish(load_weights=True, weights='audioset',
