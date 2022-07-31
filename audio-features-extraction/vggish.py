@@ -7,24 +7,23 @@
 """
 
 from __future__ import print_function
+import vggish_params as params
+from keras import backend as K
+from keras.utils.layer_utils import get_source_inputs
+from keras.layers import Flatten, Dense, Input, Conv2D, MaxPooling2D, GlobalAveragePooling2D, GlobalMaxPooling2D
+from keras.models import Model
 from __future__ import absolute_import
 
 import sys
 sys.path.append('/home/hudi/anaconda2/lib/python2.7/site-packages/h5py')
-sys.path.append('/home/hudi/anaconda2/lib/python2.7/site-packages/Keras-2.0.6-py2.7.egg')
-
-
-from keras.models import Model
-from keras.layers import Flatten, Dense, Input, conv2d, MaxPooling2D, GlobalAveragePooling2D, GlobalMaxPooling2D
-from keras.utils.layer_utils import get_source_inputs
-from keras import backend as K
-
-import vggish_params as params
+sys.path.append(
+    '/home/hudi/anaconda2/lib/python2.7/site-packages/Keras-2.0.6-py2.7.egg')
 
 
 # weight path
 WEIGHTS_PATH = '/content/SoccerNetMultimodalActionSpotting/vggish_audioset_weights_without_fc2.h5'
 WEIGHTS_PATH_TOP = './vggish_audioset_weights.h5'
+
 
 def VGGish(load_weights=True, weights='audioset',
            input_tensor=None, input_shape=None,
@@ -59,31 +58,34 @@ def VGGish(load_weights=True, weights='audioset',
         aud_input = Input(shape=input_shape, name='input_1')
     else:
         if not K.is_keras_tensor(input_tensor):
-            aud_input = Input(tensor=input_tensor, shape=input_shape, name='input_1')
+            aud_input = Input(tensor=input_tensor,
+                              shape=input_shape, name='input_1')
         else:
             aud_input = input_tensor
 
-
-
     # Block 1
-    x = Conv2D(64, (3, 3), strides=(1, 1), activation='relu', padding='same', name='conv1')(aud_input)
+    x = Conv2D(64, (3, 3), strides=(1, 1), activation='relu',
+               padding='same', name='conv1')(aud_input)
     x = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool1')(x)
 
     # Block 2
-    x = Conv2D(128, (3, 3), strides=(1, 1), activation='relu', padding='same', name='conv2')(x)
+    x = Conv2D(128, (3, 3), strides=(1, 1), activation='relu',
+               padding='same', name='conv2')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool2')(x)
 
     # Block 3
-    x = Conv2D(256, (3, 3), strides=(1, 1), activation='relu', padding='same', name='conv3/conv3_1')(x)
-    x = Conv2D(256, (3, 3), strides=(1, 1), activation='relu', padding='same', name='conv3/conv3_2')(x)
+    x = Conv2D(256, (3, 3), strides=(1, 1), activation='relu',
+               padding='same', name='conv3/conv3_1')(x)
+    x = Conv2D(256, (3, 3), strides=(1, 1), activation='relu',
+               padding='same', name='conv3/conv3_2')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool3')(x)
 
     # Block 4
-    x = Conv2D(512, (3, 3), strides=(1, 1), activation='relu', padding='same', name='conv4/conv4_1')(x)
-    x = Conv2D(512, (3, 3), strides=(1, 1), activation='relu', padding='same', name='conv4/conv4_2')(x)
+    x = Conv2D(512, (3, 3), strides=(1, 1), activation='relu',
+               padding='same', name='conv4/conv4_1')(x)
+    x = Conv2D(512, (3, 3), strides=(1, 1), activation='relu',
+               padding='same', name='conv4/conv4_2')(x)
     x = MaxPooling2D((2, 2), strides=(2, 2), padding='same', name='pool4')(x)
-
-
 
     if include_top:
         # FC block
@@ -97,14 +99,12 @@ def VGGish(load_weights=True, weights='audioset',
         elif pooling == 'max':
             x = GlobalMaxPooling2D()(x)
 
-
     if input_tensor is not None:
         inputs = get_source_inputs(input_tensor)
     else:
         inputs = aud_input
     # Create model.
-    model = Model(inputs, x, name='VGGish')
-
+    model = Model(input=inputs, output=x, name='VGGish')
 
     # load weights
     if load_weights:
