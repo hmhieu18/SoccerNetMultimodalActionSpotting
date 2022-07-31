@@ -218,6 +218,7 @@ for file_path in list_of_files:
         #                             time.gmtime(os.path.getmtime(file_path)))
         print(file_path, "is being converted")
         try:
+            startTime = time.time()
             # wavName = main(file_path)
             # extractFeatures(file_path)
             # extractDirFeatures(file_path, model)
@@ -238,7 +239,9 @@ for file_path in list_of_files:
             features = extractFeatures(file_path, file_path, shape[0], 0, model)
 
             np.save(featuresFilePath, features)
+            endTime = time.time()
             print("features", features.shape)
+            print("Time taken to extract features", endTime - startTime)
             with open(convertedFilePath, "a") as file_object:
                 # Append 'hello' at the end of file
                 file_object.write(file_path + '\n')
