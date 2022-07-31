@@ -132,11 +132,16 @@ def convert2wav(gameDir, file_suffix, outDir):
     return audioPath
 
 def tensorflowInit():
-    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.5)
-    config = tf.ConfigProto(gpu_options=gpu_options)
+    # gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.5)
+    # config = tf.ConfigProto(gpu_options=gpu_options)
+    # config.gpu_options.allow_growth = True
+    # session = tf.Session(config=config)
+    import tensorflow as tf
+    config = tf.compat.v1.ConfigProto()
     config.gpu_options.allow_growth = True
-    session = tf.Session(config=config)
-
+    config.log_device_placement = True
+    sess = tf.compat.v1.Session(config=config)
+    set_session(sess)
     vgg_base = VGGish(include_top=False, load_weights=True)
     x = vgg_base.get_layer(name='conv4/conv4_2').output
     output_layer = GlobalAveragePooling2D()(x)
