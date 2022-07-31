@@ -196,7 +196,7 @@ def tensorflowInit():
 model = tensorflowInit()
 
 dir_name = '/content/drive/MyDrive/Thesis_temp/soccernet-video'
-video_path = "/content/drive/MyDrive/Thesis_temp/soccernet-video"
+video_path = "/content/TemporallyAwarePooling_Data/content/SoccerNet/content/TemporallyAwarePooling/SoccerNet_TemporallyAwarePooling"
 # Get list of all files only in the given directory
 list_of_files = filter(os.path.isfile,
                        glob.glob(dir_name + '/**/*.wav', recursive=True))
