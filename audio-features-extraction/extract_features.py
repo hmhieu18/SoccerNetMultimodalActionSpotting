@@ -235,9 +235,10 @@ for file_path in list_of_files:
             print("visualFilepath", visualFilepath)
 
             shape = getShapeWithoutLoading(visualFilepath)
-            features = extractFeatures(file_path, file_path, visualFilepath[0], 0, model)
+            features = extractFeatures(file_path, file_path, shape[0], 0, model)
 
             np.save(featuresFilePath, features)
+            print("features", features.shape)
             with open(convertedFilePath, "a") as file_object:
                 # Append 'hello' at the end of file
                 file_object.write(file_path + '\n')
@@ -247,3 +248,4 @@ for file_path in list_of_files:
 
     else:
         print(file_path, "is converted, skip")
+
