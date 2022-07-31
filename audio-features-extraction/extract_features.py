@@ -191,6 +191,39 @@ def tensorflowInit():
 #                 # if gameDir == "T:\\SoccerNet\\data\\spain_laliga\\2014-2015\\2015-02-14 - 20-00 Real Madrid 2 - 0 Dep. La Coruna":
 #                 create_directory(gameDir.replace(ROOT_PATH, OUT_DIR_PATH))
 #                 extractDirFeatures(gameDir, model, outDir=OUT_DIR_PATH)
+import torch
+import numpy as np
+def feats2clip(feats, stride, clip_length, padding="replicate_last", off=0):
+    if padding == "zeropad":
+        print("beforepadding", feats.shape)
+        pad = feats.shape[0] - int(feats.shape[0]/stride)*stride
+        print("pad need to be", clip_length-pad)
+        m = torch.nn.ZeroPad2d((0, 0, clip_length-pad, 0))
+        feats = m(feats)
+        print("afterpadding", feats.shape)
+        # nn.ZeroPad2d(2)
+
+    idx = torch.arange(start=0, end=feats.shape[0]-1, step=stride)
+    idxs = []
+    for i in torch.arange(-off, clip_length-off):
+        idxs.append(idx+i)
+    idx = torch.stack(idxs, dim=1)
+
+    if padding == "replicate_last":
+        idx = idx.clamp(0, feats.shape[0]-1)
+    # print(idx)
+    return feats[idx, ...]
+# zero pad to the end of the clip
+
+
+def padding(feats, shape):
+    if(feats.shape < shape):
+        result = np.zeros(shape)
+        result[:feats.shape[0],
+               :feats.shape[1]] = feats
+    else:
+        result = feats[0:shape[0], :]
+    return result
 
 
 model = tensorflowInit()
@@ -237,10 +270,14 @@ for file_path in list_of_files:
 
             shape = getShapeWithoutLoading(visualFilepath)
             features = extractFeatures(file_path, file_path, shape[0], 0, model)
+            
+            F = features.reshape(-1, features.shape[-1])
+            F = padding(F, (5600, F.shape[1])).astype('float32')
+            F = feats2clip(torch.from_numpy(F), stride=30, clip_length=30)
 
-            np.save(featuresFilePath, features)
+            np.save(featuresFilePath, F)
             endTime = time.time()
-            print("features", features.shape)
+            print("features", F.shape)
             print("Time taken to extract features", endTime - startTime)
             with open(convertedFilePath, "a") as file_object:
                 # Append 'hello' at the end of file
