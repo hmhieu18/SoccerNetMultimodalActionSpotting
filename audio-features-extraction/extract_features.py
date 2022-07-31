@@ -135,7 +135,7 @@ def extractFeatures(gameDir, audioFilePath, numVideoFeatures, startTime, extract
             start += deltaTime
             cur_seg += 1
         current_features = extractor.predict(data)
-        features[cur_seg-current_features.shape[0]                 :cur_seg, :] = current_features
+        features[cur_seg-current_features.shape[0]:cur_seg, :] = current_features
 
     if features.shape[0] > numVideoFeatures:
         features = features[:numVideoFeatures, :]
@@ -225,10 +225,10 @@ for file_path in list_of_files:
 
             gameName = file_path.split(basename)[0]
             gameName = gameName.split(dir_name)[-1]
-            
+
             print("GAME NAME", gameName)
-            visualFilepath = os.path.join(
-                video_path, gameName, basename[0]+"_ResNET_TF2.npy")
+            visualFilepath = video_path + '/' + os.path.join(
+                gameName, basename[0]+"_ResNET_TF2.npy")
 
             featuresFilePath = generate_newname(file_path, '_VGGish', 'npy')
             # if not containsFile(gameDir, featuresFilePath):
@@ -236,7 +236,7 @@ for file_path in list_of_files:
 
             shape = getShapeWithoutLoading(visualFilepath)
             features = extractFeatures(file_path, file_path, 0, model)
-            
+
             np.save(featuresFilePath, features)
             with open(convertedFilePath, "a") as file_object:
                 # Append 'hello' at the end of file
