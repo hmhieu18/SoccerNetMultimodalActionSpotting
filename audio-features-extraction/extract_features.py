@@ -196,7 +196,7 @@ def tensorflowInit():
 model = tensorflowInit()
 
 dir_name = '/content/drive/MyDrive/Thesis_temp/soccernet-video'
-video_path = ""
+video_path = "/content/drive/MyDrive/Thesis_temp/soccernet-video"
 # Get list of all files only in the given directory
 list_of_files = filter(os.path.isfile,
                        glob.glob(dir_name + '/**/*.wav', recursive=True))
@@ -227,7 +227,7 @@ for file_path in list_of_files:
             gameName = gameName.split(dir_name)[-1]
 
             visualFilepath = os.path.join(
-                video_path, gameName, basename[0]+"_ResNET_TF2.npy")
+                dir_name, gameName, basename[0]+"_ResNET_TF2.npy")
 
             featuresFilePath = generate_newname(file_path, '_VGGish', 'npy')
             # if not containsFile(gameDir, featuresFilePath):
