@@ -16,7 +16,7 @@ sys.path.append('/home/hudi/anaconda2/lib/python2.7/site-packages/Keras-2.0.6-py
 
 from keras.models import Model
 from keras.layers import Flatten, Dense, Input, Conv2D, MaxPooling2D, GlobalAveragePooling2D, GlobalMaxPooling2D
-from keras.engine.topology import get_source_inputs
+from keras.utils.layer_utils import get_source_inputs
 from keras import backend as K
 
 import vggish_params as params

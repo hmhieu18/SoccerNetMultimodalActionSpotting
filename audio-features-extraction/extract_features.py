@@ -41,7 +41,11 @@ def subdirectories(root):
     return [os.path.join(root, d) for d in os.listdir(root)
         if os.path.isdir(os.path.join(root, d))]
 
-
+def generate_newname(filepath, postfix, extension):
+    basename = os.path.splitext(filepath)[0]
+    new_name = basename + postfix + "." + extension
+    return new_name
+    
 def extractDirFeatures(gameDir, extractor, outDir=None):
     if outDir == None:
         outDir = gameDir
@@ -53,12 +57,8 @@ def extractDirFeatures(gameDir, extractor, outDir=None):
     extractHalfTimeFeatures(gameDir, outDir, starts[0], extractor, '1')
     extractHalfTimeFeatures(gameDir, outDir, starts[1], extractor, '2')
     
-    # featuresFilePath = os.path.join(outDir, '1_VGGish.npy')
-    # if not containsFile(gameDir, featuresFilePath):
-    #     audioPath = convert2wav(gameDir, '1_HQ', outDir=outDir)
-    #     features = extractFeatures(gameDir, audioPath, starts[0], extractor)
-    #     np.save(featuresFilePath, features)
-    #     removeFile(audioPath)
+
+    # removeFile(audioPath)
     
     # featuresFilePath = os.path.join(outDir, '2_VGGish.npy')
     # if not containsFile(gameDir, featuresFilePath):
@@ -144,19 +144,65 @@ def tensorflowInit():
 
     return model
 
-if __name__ == '__main__':
-    model = tensorflowInit()   
+# if __name__ == '__main__':
+#     model = tensorflowInit()   
 
-    for competitionDir in subdirectories(ROOT_PATH):
-        # if competitionDir != "D:\\DeepSport\\SoccerNet-code\\data\\spain_laliga":
-        #     continue
-        create_directory(competitionDir.replace(ROOT_PATH, OUT_DIR_PATH))
-        for yearDir in subdirectories(competitionDir):
-            # if competitionDir != "D:\\DeepSport\\SoccerNet-code\\data\\spain_laliga\\2014-2015":
-            #     continue
-            create_directory(yearDir.replace(ROOT_PATH, OUT_DIR_PATH))
-            for gameDir in subdirectories(yearDir):
-                print(gameDir)
-                # if gameDir == "T:\\SoccerNet\\data\\spain_laliga\\2014-2015\\2015-02-14 - 20-00 Real Madrid 2 - 0 Dep. La Coruna":
-                create_directory(gameDir.replace(ROOT_PATH, OUT_DIR_PATH))
-                extractDirFeatures(gameDir, model, outDir=OUT_DIR_PATH)
+#     for competitionDir in subdirectories(ROOT_PATH):
+#         # if competitionDir != "D:\\DeepSport\\SoccerNet-code\\data\\spain_laliga":
+#         #     continue
+#         create_directory(competitionDir.replace(ROOT_PATH, OUT_DIR_PATH))
+#         for yearDir in subdirectories(competitionDir):
+#             # if competitionDir != "D:\\DeepSport\\SoccerNet-code\\data\\spain_laliga\\2014-2015":
+#             #     continue
+#             create_directory(yearDir.replace(ROOT_PATH, OUT_DIR_PATH))
+#             for gameDir in subdirectories(yearDir):
+#                 print(gameDir)
+#                 # if gameDir == "T:\\SoccerNet\\data\\spain_laliga\\2014-2015\\2015-02-14 - 20-00 Real Madrid 2 - 0 Dep. La Coruna":
+#                 create_directory(gameDir.replace(ROOT_PATH, OUT_DIR_PATH))
+#                 extractDirFeatures(gameDir, model, outDir=OUT_DIR_PATH)
+
+
+import glob
+import os
+import time
+import traceback
+model = tensorflowInit()   
+
+dir_name = '/content/drive/MyDrive/Thesis_temp/soccernet-video'
+# Get list of all files only in the given directory
+list_of_files = filter( os.path.isfile,
+                        glob.glob(dir_name + '/**/*.wav', recursive=True) )
+# Sort list of files based on last modification time in ascending order
+list_of_files = sorted( list_of_files,
+                        key = os.path.getmtime)
+# Iterate over sorted list of files and print file path 
+# along with last modification time of file 
+convertedFilePath = os.path.join(dir_name, "mel-converted-files-list.txt")
+if os.path.isfile(convertedFilePath):
+  f = open(convertedFilePath, "r")
+  convertedFiles = f.read()
+else:
+  convertedFiles = []
+print("LENGTH", len(list_of_files))
+for file_path in list_of_files:
+    if(not file_path in convertedFiles):
+    # timestamp_str = time.strftime(  '%m/%d/%Y :: %H:%M:%S',
+    #                             time.gmtime(os.path.getmtime(file_path))) 
+      print(file_path, "is being converted")
+      try: 
+        # wavName = main(file_path)
+        # extractFeatures(file_path)
+        # extractDirFeatures(file_path, model)
+        featuresFilePath = generate_newname(file_path, '_VGGish', 'npy')
+        # if not containsFile(gameDir, featuresFilePath):
+        features = extractFeatures(file_path, file_path, 0, model)
+        np.save(featuresFilePath, features)
+        with open(convertedFilePath, "a") as file_object:
+          # Append 'hello' at the end of file
+          file_object.write(file_path + '\n')
+      except Exception:
+          traceback.print_exc()
+      # Open a file with access mode 'a'
+
+    else:
+      print(file_path, "is converted, skip")
