@@ -147,7 +147,7 @@ def tensorflowInit():
     vgg_base = VGGish(include_top=False, load_weights=True)
     x = vgg_base.get_layer(name='conv4/conv4_2').output
     output_layer = GlobalAveragePooling2D()(x)
-    model = Model(input=vgg_base.input, output=output_layer)
+    model = Model(input=vgg_base.inputs, output=output_layer)
 
     return model
 
