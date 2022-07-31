@@ -102,7 +102,7 @@ def VGGish(load_weights=True, weights='audioset',
     else:
         inputs = aud_input
     # Create model.
-    model = Model(inputs=inputs, outputs=x, name='VGGish')
+    model = Model(input=inputs, output=x, name='VGGish')
 
     # load weights
     if load_weights:
