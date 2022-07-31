@@ -235,7 +235,7 @@ for file_path in list_of_files:
             print("visualFilepath", visualFilepath)
 
             shape = getShapeWithoutLoading(visualFilepath)
-            features = extractFeatures(file_path, file_path, 0, model)
+            features = extractFeatures(file_path, file_path, visualFilepath[0], 0, model)
 
             np.save(featuresFilePath, features)
             with open(convertedFilePath, "a") as file_object:
