@@ -227,7 +227,7 @@ for file_path in list_of_files:
             gameName = gameName.split(dir_name)[-1]
 
             print("GAME NAME", gameName)
-            visualFilepath = video_path + '/' + os.path.join(
+            visualFilepath = video_path  + os.path.join(
                 gameName, basename[0]+"_ResNET_TF2.npy")
 
             featuresFilePath = generate_newname(file_path, '_VGGish', 'npy')
