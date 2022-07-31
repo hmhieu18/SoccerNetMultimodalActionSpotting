@@ -184,7 +184,7 @@ list_of_files = sorted( list_of_files,
                         key = os.path.getmtime)
 # Iterate over sorted list of files and print file path 
 # along with last modification time of file 
-convertedFilePath = os.path.join(dir_name, "mel-converted-files-list.txt")
+convertedFilePath = os.path.join(dir_name, "vggish-converted-files-list.txt")
 if os.path.isfile(convertedFilePath):
   f = open(convertedFilePath, "r")
   convertedFiles = f.read()
