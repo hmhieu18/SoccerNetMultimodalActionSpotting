@@ -272,8 +272,9 @@ def padding(feats, shape):
 
 model = tensorflowInit()
 
-visualBaseDir = "/content/soccetnet"
-audioBaseDir = "/content/drive/MyDrive/Thesis_temp/soccernet-video"
+path_mkv = "/content/soccetnet"
+path_npy = "/content/TemporallyAwarePooling_Data/content/SoccerNet/content/TemporallyAwarePooling/SoccerNet_TemporallyAwarePooling"
+
 from SoccerNet.Downloader import getListGames
 
 gameTestList = getListGames(['challenge'])
@@ -284,8 +285,8 @@ for game in gameTestList:
     for half in [1, 2]:
         # extract features of audio
         start = time.time()
-        audio_path = main(os.path.join(audioBaseDir, game, str(half) + "_224p.mkv"))
-        visual_path = os.path.join(visualBaseDir, game, str(half) + "_ResNET_TF2.npy")
+        audio_path = main(os.path.join(path_mkv, game, str(half) + "_224p.mkv"))
+        visual_path = os.path.join(path_npy, game, str(half) + "_ResNET_TF2.npy")
 
         featuresFilePath = generate_newname(audio_path, '_VGGish_Test', 'npy')
 
