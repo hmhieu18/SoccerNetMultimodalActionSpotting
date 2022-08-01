@@ -272,7 +272,7 @@ def padding(feats, shape):
 
 model = tensorflowInit()
 
-visualBaseDir = "/content/TemporallyAwarePooling_Data/content/SoccerNet/content/TemporallyAwarePooling/SoccerNet_TemporallyAwarePooling"
+visualBaseDir = "/content/soccetnet"
 audioBaseDir = "/content/drive/MyDrive/Thesis_temp/soccernet-video"
 from SoccerNet.Downloader import getListGames
 
