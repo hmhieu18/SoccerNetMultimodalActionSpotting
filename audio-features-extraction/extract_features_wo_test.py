@@ -244,9 +244,9 @@ for game in gameTestList:
 
         visual_shape = getShapeWithoutLoading(visual_path)
         audio_feature = extractFeatures(audio_path, audio_path, visual_shape[0], 0, model)
-        
+        audio_feature = padding(audio_feature, (visual_shape[0], audio_feature.shape[1])).astype('float32')
         print(audio_path, audio_feature.shape, visual_shape)
 
-        np.save(featuresFilePath, audio_feature)
+        # np.save(featuresFilePath, audio_feature)
         end = time.time()
         print("extract features of audio:", end-start)
