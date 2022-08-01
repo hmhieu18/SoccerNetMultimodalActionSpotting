@@ -16,6 +16,50 @@ from vggish import VGGish
 # ROOT_PATH = r'D:\DeepSport\Video'
 ROOT_PATH = r'T:\SoccerNet\data'
 OUT_DIR_PATH = r'D:\DeepSport\SoccerNet-code\data'
+import subprocess
+import sys
+import os
+from fnmatch import fnmatch
+
+
+def main(filepath):
+    """ Entry point """
+    audio_codec = get_audio_codec(filepath)
+    # mapping from audio codec to file extension
+    # audio_formats = {"pcm_s16le": "wav", "pcm_s16be": "wav", "vorbis": "ogg"}
+    # get extension matching audio_codec, use audio codec name as default
+    # extension = audio_formats.get(audio_codec, audio_codec)
+    new_name = generate_newname(filepath, "", "wav")
+    print(new_name)
+    extract_command = [f"ffmpeg", "-y", "-i", filepath, "-f", "wav", "-ab", "96000", "-vn", "-ac", "1", "-ar", "8000", new_name]
+    subprocess.run(extract_command)
+    return new_name
+
+
+
+
+
+def get_audio_codec(filepath):
+    """ returns audio codec name of the first audio stream """
+    command = [
+        "ffprobe",
+        "-v",
+        "error",
+        "-select_streams",
+        "a:0",
+        "-show_entries",
+        "stream=codec_name",
+        "-of",
+        "csv=p=0",
+        filepath,
+    ]
+    completed_process = subprocess.run(
+        command, stdout=subprocess.PIPE, universal_newlines=True
+    )
+    # For TS files FFprobe seems to return duplicate audio tracks;
+    # taking only one
+    return completed_process.stdout.split("\n")[0]
+
 
 
 def getShapeWithoutLoading(numpyFile):
@@ -234,11 +278,13 @@ from SoccerNet.Downloader import getListGames
 
 gameTestList = getListGames(['challenge'])
 
+
+
 for game in gameTestList:
     for half in [1, 2]:
         # extract features of audio
         start = time.time()
-        audio_path = os.path.join(audioBaseDir, game, str(half) + "_224p.wav")
+        audio_path = main(os.path.join(audioBaseDir, game, str(half) + "_224p.mkv"))
         visual_path = os.path.join(visualBaseDir, game, str(half) + "_ResNET_TF2.npy")
 
         featuresFilePath = generate_newname(audio_path, '_VGGish_Test', 'npy')
