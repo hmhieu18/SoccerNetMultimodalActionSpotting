@@ -230,8 +230,9 @@ model = tensorflowInit()
 
 visualBaseDir = "/content/TemporallyAwarePooling_Data/content/SoccerNet/content/TemporallyAwarePooling/SoccerNet_TemporallyAwarePooling"
 audioBaseDir = "/content/drive/MyDrive/Thesis_temp/soccernet-video"
+from SoccerNet.Downloader import getListGames
 
-gameTestList = np.load("/content/drive/MyDrive/Thesis_temp/soccernet-video/splits-vgg/test_split.npy")
+gameTestList = getListGames(['challenge'])
 
 for game in gameTestList:
     for half in [1, 2]:
@@ -247,6 +248,7 @@ for game in gameTestList:
         audio_feature = padding(audio_feature, (visual_shape[0], audio_feature.shape[1])).astype('float32')
         print(audio_path, audio_feature.shape, visual_shape)
 
-        np.save(featuresFilePath, audio_feature)
+        # np.save(featuresFilePath, audio_feature)
         end = time.time()
         print("extract features of audio:", end-start)
+
