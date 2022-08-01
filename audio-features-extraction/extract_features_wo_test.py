@@ -236,6 +236,7 @@ gameTestList = np.load("/content/drive/MyDrive/Thesis_temp/soccernet-video/split
 for game in gameTestList:
     for half in [1, 2]:
         # extract features of audio
+        start = time.time()
         audio_path = os.path.join(audioBaseDir, game, str(half) + "_224p.wav")
         visual_path = os.path.join(visualBaseDir, game, str(half) + "_ResNET_TF2.npy")
 
@@ -243,5 +244,9 @@ for game in gameTestList:
 
         visual_shape = getShapeWithoutLoading(visual_path)
         audio_feature = extractFeatures(audio_path, audio_path, visual_shape[0], 0, model)
-        print(audio_path, audio_feature.shape)
-        input()
+        
+        print(audio_path, audio_feature.shape, visual_shape)
+
+        np.save(featuresFilePath, audio_feature)
+        end = time.time()
+        print("extract features of audio:", end-start)
