@@ -237,7 +237,7 @@ for game in gameTestList:
     for half in [1, 2]:
         # extract features of audio
         audio_path = os.path.join(audioBaseDir, game, str(half) + "_224p.wav")
-        visual_path = os.path.join(visualBaseDir, game, str(half) + "_224p.npy")
+        visual_path = os.path.join(visualBaseDir, game, str(half) + "_ResNET_TF2.npy")
 
         featuresFilePath = generate_newname(audio_path, '_VGGish_Test', 'npy')
 
