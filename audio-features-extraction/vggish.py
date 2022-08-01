@@ -19,7 +19,7 @@ sys.path.append(
 
 
 # weight path
-WEIGHTS_PATH = '/content/SoccerNetMultimodalActionSpotting/vggish_audioset_weights_without_fc2.h5'
+WEIGHTS_PATH = 'vggish_audioset_weights_without_fc2.h5'
 WEIGHTS_PATH_TOP = './vggish_audioset_weights.h5'
 
 
